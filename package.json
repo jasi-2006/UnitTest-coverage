@@ -1,0 +1,14 @@
+{
+  "name": "techstore-catalog",
+  "version": "1.0.0",
+  "description": "Catálogo de productos TechStore",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/products.test.js",
+    "test:coverage": "c8 node tests/products.test.js",
+    "start": "npx serve ."
+  },
+  "devDependencies": {
+    "c8": "^8.0.1"
+  }
+}
