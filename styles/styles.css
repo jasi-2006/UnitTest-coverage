@@ -1,27 +1,26 @@
-/* Variables CSS - Paleta Verde Bosque */
 :root {
-    /* Colores principales */
-    --primary: #235347;        /* Verde oscuro medio */
-    --primary-dark: #173831;   /* Verde muy oscuro */
-    --primary-light: #8cb79b;  /* Verde claro/musgo */
-    --accent: #051f20;         /* Verde casi negro */
+
+    --primary: #235347;        
+    --primary-dark: #173831;  
+    --primary-light: #8cb79b;  
+    --accent: #051f20;         
     
-    /* Colores de fondo y superficie */
-    --background: #DBF0DD;     /* Verde muy claro/mint */
+
+    --background: #DBF0DD;     
     --surface: #ffffff;
-    --surface-alt: #f0f7f1;    /* Variante de fondo */
+    --surface-alt: #f0f7f1;    
     
-    /* Colores de texto */
-    --text-primary: #051f20;   /* Verde muy oscuro para texto */
-    --text-secondary: #235347; /* Verde medio para texto secundario */
-    --text-light: #8cb79b;     /* Verde claro */
+   
+    --text-primary: #051f20;   
+    --text-secondary: #235347; 
+    --text-light: #8cb79b;     
     
-    /* Colores de estado */
+    
     --border: #8cb79b;
     --success: #235347;
     --error: #dc2626;
     
-    /* Sombras con tonos verdes */
+    
     --shadow-sm: 0 1px 2px 0 rgba(5, 31, 32, 0.05);
     --shadow: 0 4px 6px -1px rgba(5, 31, 32, 0.1);
     --shadow-lg: 0 10px 15px -3px rgba(5, 31, 32, 0.15);
@@ -30,7 +29,7 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Reset y Base */
+
 * {
     margin: 0;
     padding: 0;
@@ -50,9 +49,8 @@ body {
     padding: 0 1.5rem;
 }
 
-/* Header */
 .header {
-    background: var(--accent); /* #051f20 */
+    background: var(--accent);
     box-shadow: var(--shadow);
     position: sticky;
     top: 0;
@@ -69,7 +67,7 @@ body {
 .logo {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #DBF0DD; /* Contraste claro sobre oscuro */
+    color: #DBF0DD; 
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -82,14 +80,14 @@ body {
 
 .nav-link {
     text-decoration: none;
-    color: #8cb79b; /* Verde claro */
+    color: #8cb79b; 
     font-weight: 500;
     transition: var(--transition);
     position: relative;
 }
 
 .nav-link:hover {
-    color: #DBF0DD; /* Muy claro en hover */
+    color: #DBF0DD; 
 }
 
 .nav-link::after {
@@ -107,13 +105,13 @@ body {
     width: 100%;
 }
 
-/* Main Content */
+
 .main-content {
     padding: 2rem 1.5rem;
     min-height: calc(100vh - 300px);
 }
 
-/* Filters Section */
+
 .filters-section {
     margin-bottom: 3rem;
     text-align: center;
@@ -127,7 +125,6 @@ body {
 }
 
 
-/* Products Grid */
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -135,7 +132,7 @@ body {
     margin-bottom: 4rem;
 }
 
-/* Product Card */
+
 .product-card {
     background: var(--surface);
     border-radius: var(--radius);
@@ -178,7 +175,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(23, 56, 49, 0.9); /* #173831 con opacidad */
+    background: rgba(23, 56, 49, 0.9); 
     display: flex;
     align-items: center;
     justify-content: center;

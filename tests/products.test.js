@@ -1,7 +1,7 @@
 // tests/products.test.js
 
-import { getProducts} from '../js/products.js';
-import { formatCurrency, findProductById, isValidProduct, truncateText } from '../js/utils.js';
+import { getProducts } from '../js/products.js';
+import { formatCurrency, findProductById, truncateText } from '../js/utils.js';
 
 // Test runner simple
 const tests = [];
@@ -9,32 +9,32 @@ const describe = (name, fn) => fn();
 const it = (name, fn) => tests.push({ name, fn });
 const expect = (actual) => ({
     toBe: (expected) => {
-        if (actual !== expected) throw new Error(`Expected ${expected}, got ${actual}`);
+        if (actual !== expected) throw new Error(`esperada ${expected}, consiguió ${actual}`);
     },
     toEqual: (expected) => {
         if (JSON.stringify(actual) !== JSON.stringify(expected)) {
-            throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+            throw new Error(`esperada ${JSON.stringify(expected)}, consiguió${JSON.stringify(actual)}`);
         }
     },
     toBeGreaterThan: (expected) => {
-        if (!(actual > expected)) throw new Error(`Expected ${actual} > ${expected}`);
+        if (!(actual > expected)) throw new Error(`Experada ${actual} > ${expected}`);
     },
     toHaveLength: (expected) => {
-        if (actual.length !== expected) throw new Error(`Expected length ${expected}, got ${actual.length}`);
+        if (actual.length !== expected) throw new Error(`longitud esperada  ${expected}, consiguió${actual.length}`);
     }
 });
 
 // ============ TESTS ============
 
-describe('Products Module', () => {
+describe('modulo de productos ', () => {
     
-    describe('getProducts', () => {
-        it('should return array of 6 products', () => {
+    describe('traer productos', () => {
+        it('debería devolver una matriz de 6 producto', () => {
             const products = getProducts();
             expect(products).toHaveLength(6);
         });
 
-        it('should have products with id, name, price', () => {
+       it('Debe tener productos con identificación, nombre y precio.', () => {
             const products = getProducts();
             const p = products[0];
             expect(typeof p.id).toBe('number');
@@ -45,22 +45,22 @@ describe('Products Module', () => {
 
 });
 
-describe('Utils Module', () => {
+describe('Módulo de utilidades', () => {
     
-    describe('formatCurrency', () => {
-        it('should format 10.5 to currency', () => {
+    describe('formato de moneda ', () => {
+        it('Debería formatear 10.5 a moneda', () => {
             const result = formatCurrency(10.5);
             // Verifica que contenga números
-            if (!result.match(/\d/)) throw new Error('No format currency');
+            if (!result.match(/\d/)) throw new Error('formato de moneda ');
         });
 
-        it('should return $0.00 for invalid', () => {
-            expect(formatCurrency('invalid')).toBe('$0.00');
+        it('Debería devolver $0.00 por no válido', () => {
+            expect(formatCurrency('invalido')).toBe('$0.00');
         });
     });
 
-    describe('findProductById', () => {
-        it('should find product 1', () => {
+    describe('traer producto ', () => {
+        it('Debería encontrar el producto 1', () => {
             const products = getProducts();
             const p = findProductById(products, 1);
             expect(p.id).toBe(1);
@@ -68,9 +68,8 @@ describe('Utils Module', () => {
     });
 
 
-
-    describe('truncateText', () => {
-        it('should truncate long text', () => {
+    describe('truncar texto', () => {
+        it('debe truncar el texto largo', () => {
             const long = 'a'.repeat(200);
             const result = truncateText(long, 100);
             expect(result.endsWith('...')).toBe(true);
@@ -83,7 +82,7 @@ describe('Utils Module', () => {
 let passed = 0;
 let failed = 0;
 
-console.log('\n🧪 Running Tests...\n');
+console.log('\n corriendo tests...\n');
 
 tests.forEach(({ name, fn }) => {
     try {
@@ -97,6 +96,6 @@ tests.forEach(({ name, fn }) => {
     }
 });
 
-console.log(`\n📊 Results: ${passed} passed, ${failed} failed\n`);
+console.log(`\n📊 Resultado: ${passed} paso, ${failed} fallo\n`);
 
 if (failed > 0) process.exit(1);
