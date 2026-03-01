@@ -1,6 +1,6 @@
 /**
- * Datos de productos - Catálogo TechStore
- * @returns {Array} Array de productos
+ * Datos de productos - Catálogo UnitTest
+ * @returns {Array} 
  */
 export const getProducts = () => [
     {
