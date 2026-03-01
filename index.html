@@ -15,9 +15,32 @@
                 <a href="#productos" class="nav-link">Productos</a>
                 <a href="#categorias" class="nav-link">Categorías</a>
                 <a href="#contacto" class="nav-link">Contacto</a>
+                <button type="button" class="cart-btn" id="cartBtn" aria-label="Ver carrito">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
             </nav>
         </div>
     </header>
+
+    <!-- Panel lateral del carrito -->
+    <aside class="cart-panel" id="cartPanel">
+        <div class="cart-panel-header">
+            <h2 class="cart-panel-title">Tu carrito</h2>
+            <button type="button" class="cart-close-btn" id="cartCloseBtn" aria-label="Cerrar carrito">×</button>
+        </div>
+        <div class="cart-panel-body" id="cartPanelBody">
+            <!-- Items del carrito se renderizan aquí -->
+        </div>
+        <div class="cart-panel-footer" id="cartPanelFooter">
+            <div class="cart-total">
+                <span>Total:</span>
+                <strong id="cartTotal">$0.00</strong>
+            </div>
+            <button type="button" class="cart-checkout-btn" id="cartCheckoutBtn">Finalizar compra</button>
+        </div>
+    </aside>
+    <div class="cart-overlay" id="cartOverlay"></div>
 
     <main class="container main-content">
         <section class="filters-section">
@@ -26,10 +49,7 @@
 
         <!-- Catálogo de Productos -->
         <section class="products-section" id="productos">
-            <div class="products-grid" id="productsGrid">
-
-                <input type="button" value="" >
-            </div>
+            <div class="products-grid" id="productsGrid"></div>
         </section>
     </main>
 
