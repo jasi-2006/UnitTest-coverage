@@ -30,6 +30,41 @@ npm test
 
 📊 Resultado: 6 paso, 0 fallo
 
+🛒 Módulo del Carrito - Pruebas Unitarias
+
+========================================
+
+  ✅ deberia retornar array vacio
+  ✅ deberia retornar un nuevo array cada vez
+  ✅ deberia agregar producto a carrito vacio
+  ✅ deberia agregar cantidad especificada
+  ✅ deberia incrementar la cantidad si el producto existe
+  ✅ deberia agregar nuevo producto si ID diferente
+  ✅ NO deberia mutar carrito original (inmutable)
+  ✅ deberia retornar mismo carrito si producto invalido
+  ✅ deberia hacer copia profunda del producto
+  ✅ deberia eliminar producto existente
+  ✅ deberia retornar array vacio si elimina unico item
+  ✅ deberia retornar mismo carrito si ID no existe
+  ✅ NO deberia mutar carrito original
+  ✅ deberia actualizar cantidad de producto
+  ✅ deberia eliminar producto si cantidad es 0
+  ✅ deberia eliminar producto si cantidad negativa
+  ✅ deberia retornar mismo carrito si producto no existe
+  ✅ NO deberia mutar carrito original
+  ✅ deberia retornar 0 para carrito vacio
+  ✅ deberia contar cantidad total de items
+  ✅ deberia contar correctamente despues de eliminar
+  ✅ deberia retornar array vacio
+  ✅ deberia retornar nuevo array
+  ✅ inmutabilidad garantizada en todo el flujo
+
+========================================
+📊 Resultados: 24 pasadas, 0 fallidas
+⏱️  Duración: 5.00ms
+📈 Tasa de éxito: 100.0%
+========================================
+
 ## estructura del proyecto 
 
 nombre-del-proyecto/
@@ -38,6 +73,9 @@ nombre-del-proyecto/
 │   ├── app.js              # Punto de entrada y manejo del DOM/eventos
 │   ├── products.js         # Definición de productos o lógica de negocio
 │   └── utils.js            # Funciones auxiliares y herramientas
+│   └── cart.js             # Funciones principales del carrito
+│   └── cart-page.js        # conneccion del carrito con los producctos 
+|
 │
 ├── node_modules/           # Dependencias instaladas vía npm (omitido en Git)
 │
@@ -46,6 +84,7 @@ nombre-del-proyecto/
 │
 ├── tests/
 │   └── products.test.js    # Pruebas unitarias para la lógica de productos
+│   └── cart.test.js        # pruevas unitarias para la logica del carrito
 │
 ├── index.html              # Archivo HTML principal (punto de entrada visual)
 ├── package-lock.json       # Registro exacto de versiones de dependencias
