@@ -1,0 +1,15 @@
+{
+  "name": "greentech-catalog",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/products.test.js && node tests/cart.test.js",
+    "test:products": "node tests/products.test.js",
+    "test:cart": "node tests/cart.test.js",
+    "test:coverage": "c8 node tests/products.test.js && c8 node tests/cart.test.js",
+    "start": "npx serve ."
+  },
+  "devDependencies": {
+    "c8": "^8.0.1"
+  }
+}
