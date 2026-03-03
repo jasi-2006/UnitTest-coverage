@@ -1,72 +1,47 @@
 /**
- * Módulo del Carrito - Estado y lógica
+ * Módulo del Carrito - Programación Funcional Pura
  */
 
-let cartItems = [];
+export const createEmptyCart = () => [];
 
-/**
- * Obtiene los items del carrito
- * @returns {Array} Items en el carrito [{ product, quantity }]
- */
-export const getCartItems = () => [...cartItems];
-
-/**
- * Agrega un producto al carrito
- * @param {Object} product - Producto a agregar
- * @param {number} quantity - Cantidad (default 1)
- */
-export const addToCart = (product, quantity = 1) => {
-    if (!product || !product.id) return;
-
-    const existing = cartItems.find(item => item.product.id === product.id);
-    if (existing) {
-        existing.quantity += quantity;
-    } else {
-        cartItems.push({ product: { ...product }, quantity });
+export const addToCart = (cart, product, quantity = 1) => {
+    if (!product || !product.id) return cart;
+    
+    const existingIndex = cart.findIndex(item => item.product.id === product.id);
+    
+    if (existingIndex >= 0) {
+        return cart.map((item, index) => 
+            index === existingIndex 
+                ? { ...item, quantity: item.quantity + quantity }
+                : item
+        );
     }
+    
+    return [...cart, { product: { ...product }, quantity }];
 };
 
-/**
- * Elimina un producto del carrito
- * @param {number} productId - ID del producto
- */
-export const removeFromCart = (productId) => {
-    cartItems = cartItems.filter(item => item.product.id !== productId);
+export const removeFromCart = (cart, productId) => {
+    return cart.filter(item => item.product.id !== productId);
 };
 
-/**
- * Actualiza la cantidad de un producto
- * @param {number} productId - ID del producto
- * @param {number} quantity - Nueva cantidad (0 para eliminar)
- */
-export const updateQuantity = (productId, quantity) => {
+export const updateQuantity = (cart, productId, quantity) => {
     if (quantity <= 0) {
-        removeFromCart(productId);
-        return;
+        return removeFromCart(cart, productId);
     }
-    const item = cartItems.find(i => i.product.id === productId);
-    if (item) item.quantity = quantity;
+    
+    return cart.map(item => 
+        item.product.id === productId 
+            ? { ...item, quantity }
+            : item
+    );
 };
 
-/**
- * Calcula el total del carrito
- * @returns {number} Total en USD
- */
-export const getCartTotal = () => {
-    return cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+export const getCartTotal = (cart) => {
+    return cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
 };
 
-/**
- * Cantidad total de items
- * @returns {number}
- */
-export const getCartCount = () => {
-    return cartItems.reduce((sum, item) => sum + item.quantity, 0);
+export const getCartCount = (cart) => {
+    return cart.reduce((sum, item) => sum + item.quantity, 0);
 };
 
-/**
- * Vacía el carrito
- */
-export const clearCart = () => {
-    cartItems = [];
-};
+export const clearCart = () => [];
