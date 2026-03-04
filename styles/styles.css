@@ -945,7 +945,7 @@ body {
     box-shadow: var(--shadow);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 568px) {
     .cart-page-content {
         grid-template-columns: 1fr;
     }
@@ -986,7 +986,7 @@ body {
     }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 420px) {
     .main-nav {
         gap: 1rem;
     }
