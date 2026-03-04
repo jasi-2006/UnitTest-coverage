@@ -1,0 +1,44 @@
+# Dependencias de Node (no necesarias en producción)
+node_modules/
+package-lock.json
+package.json
+yarn.lock
+pnpm-lock.yaml
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Variables de entorno (por seguridad)
+.env
+.env.local
+.env.*.local
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores de código
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos de backup
+*.bak
+*.tmp
+*.temp
+
+# Testing (si no quieres subir tests a producción)
+# tests/  ← Descomenta esta línea si NO quieres subir la carpeta tests
+
+# Otros
+.cache/
+dist/
+build/
