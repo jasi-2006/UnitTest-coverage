@@ -1,4 +1,16 @@
-import { getCartCount, removeFromCart, updateQuantity, clearCart, getCartTotal, addToCart, createEmptyCart } from '../js/cart.js';
+/**
+ * Tests para cart.js con estado global (proyecto ya desplegado)
+ */
+
+import { 
+    getCart,
+    addToCart, 
+    removeFromCart, 
+    updateQuantity, 
+    getCartTotal, 
+    getCartCount, 
+    clearCart 
+} from '../js/cart.js';
 
 const mockProduct1 = {
     id: 1,
@@ -14,262 +26,270 @@ const mockProduct2 = {
     category: 'Periféricos'
 };
 
+// ==========================================
+// TEST RUNNER
+// ==========================================
 
-// test simples para el carrito 
+const tests = [];
+const describe = (name, fn) => fn();
+const it = (name, fn) => tests.push({ name, fn });
 
-const tests=[];
-const describe = (name, fn)=>fn();
-const it = (name, fn ) =>tests.push({name, fn});
-
-const expect =(actual) =>({
-    toBe:(expected)=>{  
-        if (actual !==expected){
-            throw new console.error(`expected ${expected}, got ${actual}`);
+const expect = (actual) => ({
+    toBe: (expected) => {  
+        if (actual !== expected) {
+            throw new Error(`Expected ${expected}, got ${actual}`);
         }
     },
     
-    toEcual: (expected)=>{
-        if (JSON.stringify(actual)!== JSON.stringify.apply(expected)){
-            throw new error (`$Expected${JSON.stringify(expected)},got${JSON.stringify(actual)}`);
+    toEqual: (expected) => {
+        if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+            throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
         }
     },
     
-    toBeCloseTo:(expected, precision= 2)=>{
-        const factor =Math.pow(10,precision);
-        if(Math.round(actual *factor)){
-            throw new Error(`expected${actual}to be close to ${expected}`);
+    toBeCloseTo: (expected, precision = 2) => {
+        const factor = Math.pow(10, precision);
+        const actualRounded = Math.round(actual * factor);
+        const expectedRounded = Math.round(expected * factor);
+        if (actualRounded !== expectedRounded) {
+            throw new Error(`Expected ${expected} (±${precision} dec), got ${actual}`);
         }
     },
 
-    toHaveLength:(expected)=>{
-        if(actual.length !==expected ){
-            throw new Error(`expected length${expected}, got${actual.length}`);
+    toHaveLength: (expected) => {
+        if (actual.length !== expected) {
+            throw new Error(`Expected length ${expected}, got ${actual.length}`);
         }
     },
 
-    toBeDefined:()=>{
-        if(actual === undefined){
-            throw new Error("expected defined value, got undefined")
+    toBeDefined: () => {
+        if (actual === undefined) {
+            throw new Error("Expected defined value, got undefined");
         }
     }
 });
 
-// test del carrito 
+// ==========================================
+// TESTS
+// ==========================================
 
-describe(' modulo del carrito- pruevas unitarias',()=>{
-    describe('createEmptyCarts',()=>{
-        it ("deberia retornar array vacio",()=>{
-            const cart =createEmptyCart();
+describe('🛒 Carrito - Pruebas Unitarias', () => {
+    
+    // LIMPIAR ANTES DE CADA TEST
+    beforeEach: () => clearCart(),
+    
+    describe('getCart', () => {
+        it('deberia retornar array vacio inicialmente', () => {
+            clearCart();
+            const cart = getCart();
             expect(cart).toHaveLength(0);
-        })
-        
-        it('deberia retornar un nuevo array cada vez',()=>{
-        const cart1 =createEmptyCart();
-        const cart2 =createEmptyCart();
-        expect(cart1 ===cart2).toBe(false);
+        });
+    });
+    
+    describe('addToCart', () => {
+        it('deberia agregar producto a carrito vacio', () => {
+            clearCart();
+            addToCart(mockProduct1);
+            const cart = getCart();
+            expect(cart).toHaveLength(1);
+            expect(cart[0].product.id).toBe(1);
+            expect(cart[0].quantity).toBe(1);
         });
 
-    });
+        it('deberia agregar cantidad especificada', () => {
+            clearCart();
+            addToCart(mockProduct1, 3);
+            const cart = getCart();
+            expect(cart[0].quantity).toBe(3);
+        });
 
-    describe("addToCart", ()=>{
-    it("deberia agregar producto a carrito vacio", ()=>{
-        const cart = addToCart([], mockProduct1);
-        expect (cart).toHaveLength(1);
-        expect (cart[0].product.id).toBe(1);
-        expect(cart[0].quantity).toBe(1);
-    });
+        it('deberia incrementar cantidad si producto existe', () => {
+            clearCart();
+            addToCart(mockProduct1, 2);
+            addToCart(mockProduct1, 3);
+            const cart = getCart();
+            expect(cart).toHaveLength(1);
+            expect(cart[0].quantity).toBe(5);
+        });
 
-    it("deberia agregar cantidad especificada", ()=>{
-        const cart = addToCart([], mockProduct1,3);
-        expect(cart[0].quantity).toBe(3);
-    });
-
-    it ("deberia incrementar la cantidad si el producto existe ",()=>{
-        let cart =addToCart([], mockProduct1, 2);
-        cart = addToCart(cart,mockProduct1, 3);
-        expect (cart).toHaveLength(1);
-        expect(cart[0].quantity).toBe(5);
-    });
-
-    it('deberia agregar nuevo producto si ID diferente', () => {
-        let cart = addToCart([], mockProduct1);
-        cart = addToCart(cart, mockProduct2);
-        expect(cart).toHaveLength(2);
-        expect(cart[0].product.id).toBe(1);
-        expect(cart[1].product.id).toBe(2);
-    });
+        it('deberia agregar nuevo producto si ID diferente', () => {
+            clearCart();
+            addToCart(mockProduct1);
+            addToCart(mockProduct2);
+            const cart = getCart();
+            expect(cart).toHaveLength(2);
+        });
         
-    it('NO deberia mutar carrito original (inmutable)', () => {
-        const original = [];
-        const newCart = addToCart(original, mockProduct1);
-        expect(original).toHaveLength(0); 
-        expect(newCart).toHaveLength(1);  
-    });
+        it('no deberia agregar producto invalido (null)', () => {
+            clearCart();
+            addToCart(null);
+            expect(getCart()).toHaveLength(0);
+        });
         
-    it('deberia retornar mismo carrito si producto invalido', () => {
-        const cart = addToCart([], null);
-        expect(cart).toHaveLength(0);
-          
-        const cart2 = addToCart([], { name: 'Sin ID' });
-        expect(cart2).toHaveLength(0);
+        it('no deberia agregar producto sin ID', () => {
+            clearCart();
+            addToCart({ name: 'Sin ID', price: 100 });
+            expect(getCart()).toHaveLength(0);
+        });
     });
-        
-    it('deberia hacer copia profunda del producto', () => {
-        const cart = addToCart([], mockProduct1);
-        cart[0].product.name = 'Modificado';
-        expect(mockProduct1.name).toBe('Laptop Pro'); 
-    });
-});
     
-describe('removeFromCart', () => {
-    it('deberia eliminar producto existente', () => {
-        let cart = addToCart([], mockProduct1);
-        cart = addToCart(cart, mockProduct2);
-        cart = removeFromCart(cart, 1);
-        expect(cart).toHaveLength(1);
-        expect(cart[0].product.id).toBe(2);
-    });
+    describe('removeFromCart', () => {
+        it('deberia eliminar producto existente', () => {
+            clearCart();
+            addToCart(mockProduct1);
+            addToCart(mockProduct2);
+            removeFromCart(1);
+            const cart = getCart();
+            expect(cart).toHaveLength(1);
+            expect(cart[0].product.id).toBe(2);
+        });
         
-    it('deberia retornar array vacio si elimina unico item', () => {
-        let cart = addToCart([], mockProduct1);
-        cart = removeFromCart(cart, 1);
-        expect(cart).toHaveLength(0);
-    });
+        it('deberia dejar carrito vacio si elimina unico item', () => {
+            clearCart();
+            addToCart(mockProduct1);
+            removeFromCart(1);
+            expect(getCart()).toHaveLength(0);
+        });
         
-    it('deberia retornar mismo carrito si ID no existe', () => {
-        let cart = addToCart([], mockProduct1);
-        const originalLength = cart.length;
-        cart = removeFromCart(cart, 999);
-        expect(cart).toHaveLength(originalLength);
+        it('no deberia fallar si ID no existe', () => {
+            clearCart();
+            addToCart(mockProduct1);
+            removeFromCart(999); // No existe
+            expect(getCart()).toHaveLength(1); // Sigue igual
+        });
     });
-        
-    it('NO deberia mutar carrito original', () => {
-        let cart = addToCart([], mockProduct1);
-        cart = addToCart(cart, mockProduct2);
-        const original = cart;
-        const newCart = removeFromCart(cart, 1);
-        expect(original).toHaveLength(2);
-        expect(newCart).toHaveLength(1);
-    });
-});
     
-describe('updateQuantity', () => {
-    it('deberia actualizar cantidad de producto', () => {
-        let cart = addToCart([], mockProduct1, 1);
-        cart = updateQuantity(cart, 1, 5);
-        expect(cart[0].quantity).toBe(5);
-    });
+    describe('updateQuantity', () => {
+        it('deberia actualizar cantidad', () => {
+            clearCart();
+            addToCart(mockProduct1, 1);
+            updateQuantity(1, 5);
+            expect(getCart()[0].quantity).toBe(5);
+        });
         
-    it('deberia eliminar producto si cantidad es 0', () => {
-        let cart = addToCart([], mockProduct1);
-        cart = updateQuantity(cart, 1, 0);
-        expect(cart).toHaveLength(0);
-    });
+        it('deberia eliminar si cantidad es 0', () => {
+            clearCart();
+            addToCart(mockProduct1);
+            updateQuantity(1, 0);
+            expect(getCart()).toHaveLength(0);
+        });
         
-    it('deberia eliminar producto si cantidad negativa', () => {
-        let cart = addToCart([], mockProduct1);
-        cart = updateQuantity(cart, 1, -1);
-        expect(cart).toHaveLength(0);
+        it('deberia eliminar si cantidad negativa', () => {
+            clearCart();
+            addToCart(mockProduct1);
+            updateQuantity(1, -5);
+            expect(getCart()).toHaveLength(0);
+        });
     });
-        
-    it('deberia retornar mismo carrito si producto no existe', () => {
-        let cart = addToCart([], mockProduct1);
-        const newCart = updateQuantity(cart, 999, 5);
-        expect(newCart).toHaveLength(1);
-        expect(newCart[0].quantity).toBe(1);
-    });
-        
-    it('NO deberia mutar carrito original', () => {
-        let cart = addToCart([], mockProduct1, 2);
-        const original = cart;
-        const newCart = updateQuantity(cart, 1, 5);
-        expect(original[0].quantity).toBe(2);
-        expect(newCart[0].quantity).toBe(5);
-    });
-});
     
+    describe('getCartTotal', () => {
+        it('deberia retornar 0 para carrito vacio', () => {
+            clearCart();
+            expect(getCartTotal()).toBe(0);
+        });
+        
+        it('deberia calcular total de un item', () => {
+            clearCart();
+            addToCart(mockProduct1, 2); // 1299.99 * 2 = 2599.98
+            expect(getCartTotal()).toBeCloseTo(2599.98, 2);
+        });
+        
+        it('deberia calcular total de multiples items', () => {
+            clearCart();
+            addToCart(mockProduct1, 1); // 1299.99
+            addToCart(mockProduct2, 2); // 79.99 * 2 = 159.98
+            // Total: 1459.97
+            expect(getCartTotal()).toBeCloseTo(1459.97, 2);
+        });
+    });
     
-describe('getCartCount', () => {
-    it('deberia retornar 0 para carrito vacio', () => {
-        expect(getCartCount([])).toBe(0);
-    });
+    describe('getCartCount', () => {
+        it('deberia retornar 0 para carrito vacio', () => {
+            clearCart();
+            expect(getCartCount()).toBe(0);
+        });
         
-    it('deberia contar cantidad total de items', () => {
-        let cart = addToCart([], mockProduct1, 3);
-        cart = addToCart(cart, mockProduct2, 2);
-        expect(getCartCount(cart)).toBe(5);
-    });
+        it('deberia contar cantidad total de items', () => {
+            clearCart();
+            addToCart(mockProduct1, 3);
+            addToCart(mockProduct2, 2);
+            expect(getCartCount()).toBe(5);
+        });
         
-    it('deberia contar correctamente despues de eliminar', () => {
-        let cart = addToCart([], mockProduct1, 5);
-        cart = addToCart(cart, mockProduct2, 3);
-        cart = removeFromCart(cart, 1);
-        expect(getCartCount(cart)).toBe(3);
+        it('deberia contar correctamente despues de eliminar', () => {
+            clearCart();
+            addToCart(mockProduct1, 5);
+            addToCart(mockProduct2, 3);
+            removeFromCart(1);
+            expect(getCartCount()).toBe(3); // Solo quedan 3 del mouse
+        });
     });
-});
     
-describe('clearCart', () => {
-    it('deberia retornar array vacio', () => {
-        expect(clearCart()).toHaveLength(0);
+    describe('clearCart', () => {
+        it('deberia vaciar el carrito', () => {
+            clearCart();
+            addToCart(mockProduct1);
+            addToCart(mockProduct2);
+            clearCart();
+            expect(getCart()).toHaveLength(0);
+            expect(getCartCount()).toBe(0);
+            expect(getCartTotal()).toBe(0);
+        });
     });
-        
-    it('deberia retornar nuevo array', () => {
-        const empty = clearCart();
-        expect(Array.isArray(empty)).toBe(true);
-    });
-});
     
-describe('Flujo completo de integración', () => {
-
-        
-    it('inmutabilidad garantizada en todo el flujo', () => {
-        const historial = [];
-        
-        let cart = createEmptyCart();
-        historial.push(cart);           
-        
-        cart = addToCart(cart, mockProduct1);
-        historial.push(cart);           
-        
-        cart = addToCart(cart, mockProduct2);
-        historial.push(cart);        
-        
-        cart = updateQuantity(cart, 1, 5);
-        historial.push(cart);           
-        
-        cart = removeFromCart(cart, 2); 
-        historial.push(cart);          
-
-        for (let i = 0; i < historial.length - 1; i++) {
-            expect(historial[i] === historial[i + 1]).toBe(false);
-        }
-
-        
-        expect(historial[0]).toHaveLength(0);          
-        expect(historial[1]).toHaveLength(1);           
-        expect(historial[4]).toHaveLength(1);           
-        
-        const finalItem = historial[4][0];
-        expect(finalItem.product.id).toBe(1);
-        expect(finalItem.quantity).toBe(5);
+    describe('Flujo completo de integración', () => {
+        it('flujo completo: agregar, actualizar, eliminar, totales', () => {
+            // 1. Inicio vacio
+            clearCart();
+            expect(getCartCount()).toBe(0);
+            
+            // 2. Agregar laptop
+            addToCart(mockProduct1, 1);
+            expect(getCartCount()).toBe(1);
+            expect(getCartTotal()).toBeCloseTo(1299.99, 2);
+            
+            // 3. Agregar mouse x2
+            addToCart(mockProduct2, 2);
+            expect(getCartCount()).toBe(3);
+            expect(getCart()).toHaveLength(2);
+            
+            // 4. Agregar mas laptops (incrementa)
+            addToCart(mockProduct1, 2);
+            expect(getCartCount()).toBe(5);
+            expect(getCart()).toHaveLength(2);
+            
+            // Verificar laptop tiene qty 3
+            const laptop = getCart().find(item => item.product.id === 1);
+            expect(laptop.quantity).toBe(3);
+            
+            // 5. Actualizar mouse a 1
+            updateQuantity(2, 1);
+            expect(getCartCount()).toBe(4);
+            
+            // 6. Eliminar laptops
+            removeFromCart(1);
+            expect(getCart()).toHaveLength(1);
+            expect(getCartCount()).toBe(1);
+            expect(getCartTotal()).toBeCloseTo(79.99, 2);
+            
+            // 7. Vaciar
+            clearCart();
+            expect(getCart()).toHaveLength(0);
+        });
     });
 });
-});
 
-
-
-// ejecucuin de los tests
+// ==========================================
+// EJECUCION DE TESTS
+// ==========================================
 
 let passed = 0;
 let failed = 0;
 
-console.log('\n modulo de carrito')
-console.log('-------------------------------------\n')
-
-console.log('\n🛒 Módulo del Carrito - Pruebas Unitarias\n');
+console.log('\n🛒 Carrito - Pruebas Unitarias\n');
 console.log('========================================\n');
 
-const startTime = Date.now();  
+const startTime = Date.now();
 
 tests.forEach(({ name, fn }) => {
     try {
@@ -283,7 +303,7 @@ tests.forEach(({ name, fn }) => {
     }
 });
 
-const endTime = Date.now();  
+const endTime = Date.now();
 const duration = (endTime - startTime).toFixed(2);
 
 console.log('\n========================================');
